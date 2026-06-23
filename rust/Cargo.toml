@@ -9,5 +9,8 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 anyhow = "1.0.89"
 discord-rich-presence = { git = "https://github.com/vionya/discord-rich-presence.git" }
-flutter_rust_bridge = "=2.11.1"
+flutter_rust_bridge = "=2.12.0"
 lazy_static = "1.5.0"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
