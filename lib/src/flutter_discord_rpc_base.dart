@@ -40,10 +40,13 @@ final class FlutterDiscordRPC {
     bool autoRetry = false,
     Duration retryDelay = const Duration(seconds: 5),
   }) async {
+    // One retry loop at most: each failed connect used to start another,
+    // never stopping the one before.
+    _timer?.cancel();
+    _timer = null;
     try {
       await api.discordConnect();
       _onConnected(true);
-      _timer?.cancel();
     } catch (e) {
       if (autoRetry) {
         _timer = Timer.periodic(retryDelay, (timer) async {

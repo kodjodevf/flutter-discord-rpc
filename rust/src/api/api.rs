@@ -185,6 +185,10 @@ pub fn discord_dispose() -> anyhow::Result<()> {
 
 #[flutter_rust_bridge::frb(init)]
 pub fn init_app() {
-    // Default utilities - feel free to customize
-    flutter_rust_bridge::setup_default_user_utils();
+    // Not flutter_rust_bridge::setup_default_user_utils(): it sets
+    // RUST_BACKTRACE=1 for the whole app when unset, and installs a panic
+    // hook that captures a backtrace. A plugin must not change that for the
+    // app. On Linux, libflutter_linux_gtk.so exports its own unwinder, and
+    // capturing a backtrace through it crashes the app with SIGSEGV: every
+    // failed connection, with Discord closed, took the app down.
 }
